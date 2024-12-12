@@ -1,0 +1,15 @@
+.gioco {
+    
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pulstalpa {
+    background-color: rgb(128, 78, 3);
+    border: none;
+}
