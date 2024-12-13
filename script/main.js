@@ -37,11 +37,11 @@ window.onload = function () {
     }
     document.getElementById("gioco").appendChild(tabella);
 
-    impostaTurno(2);
+    impostaTimerFunz(turno, 0, 2);
 }
 
-function impostaTurno (maxSec) {
-    setTimeout(turno, 1000*Math.floor(Math.random()*maxSec));
+function impostaTimerFunz (funz, minSec, maxSec, ...args) { //... serve per convertire un array in argomenti separati da virgola. In questo caso serve per passare un numero indefinito di argomenti alla funzione
+    setTimeout(funz, 1000*minSec+Math.floor(Math.random()*(maxSec-minSec)*1000), ...args);
 }
 
 function turno () {
@@ -54,4 +54,12 @@ function turno () {
     img.style.height = "100%";
     img.style.width = "100%";
     button.appendChild(img);
+    impostaTimerFunz(togliTalpa, 0, 1, talpa_x, talpa_y); //talpa_xy sono parametri che vengono passati
+}
+
+function togliTalpa (talpa_x, talpa_y) {
+    alert(talpa_x);
+    let button = document.getElementById("puls/" + talpa_x + "/" + talpa_y);
+    button.removeChild(button.childNodes[0]);
+    impostaTimerFunz(turno, 0, 4);
 }
