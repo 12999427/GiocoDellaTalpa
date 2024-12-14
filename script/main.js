@@ -1,15 +1,31 @@
 let dim_y = 15;
 let dim_x = 9;
+let punteggio = 0;
 
-window.onload = function () {
-    dim_y = parseInt(prompt("Dimesione X"));
-    dim_x = parseInt(prompt("Dimesione Y"));
+function genera () {
+    document.getElementById("punteggio").style.display = "block";
+    document.getElementById("genera").style.display = "none";
+    document.getElementById("difficolasceglibile").style.display = "none";
+    document.getElementById("difficolasceglibilel").style.display = "none";
+    document.getElementById("difficolaingioco").style.display = "block";
+    document.getElementById("difficolaingiocol").style.display = "block";
+    document.getElementById("dimens").style.display = "none";
 
-    if (isNaN(dim_x) || isNaN(dim_y)) {window.location.href = window.location.href;}
-
+    difficoltà = parseInt(document.getElementById("difficolasceglibile").value);
+    dim_x = parseFloat(document.getElementById("dx").value);
+    dim_y = parseFloat(document.getElementById("dy").value);
+    if (Math.trunc(dim_x) == dim_x && Math.trunc(dim_y) == dim_y
+        && !isNaN(dim_x) && !isNaN(dim_y)
+        && dim_x>0 && dim_y>0) {
+        dim_x = Math.trunc(dim_x);
+        dim_y = Math.trunc(dim_y);
+    } else {
+        alert("Non valido");
+        window.location.href = window.location.href;
+    }
     let tabella = document.createElement("table");
-    tabella.style.height = "100vh";
-    tabella.style.width = "100vw";
+    tabella.style.height = "85vh";
+    tabella.style.width = "95vw";
     for (let y = 0; y<dim_y; y++) {
         let riga = document.createElement("tr");
         for (let x = 0; x<dim_x; x++) {
@@ -23,11 +39,20 @@ window.onload = function () {
             puls.style.height = "100%";
             puls.classList.add("pulstalpa");
             
-            puls.dataset.tempo = 0;
+            puls.dataset.x = x;
+            puls.dataset.y = y;
 
             puls.id = `puls/${x}/${y}`;
             puls.onclick = function () {
-                clickTalpa();
+                if (this.dataset.x == document.querySelector("table").dataset.x &&
+                    this.dataset.y == document.querySelector("table").dataset.y
+                ) {
+                    punteggio++;
+                    applicaAnimazione();
+                } else if (punteggio > 0) {
+                    punteggio--;
+                }
+                applicaPunteggio();
             };
 
             cella.appendChild(puls);
@@ -47,19 +72,48 @@ function impostaTimerFunz (funz, minSec, maxSec, ...args) { //... serve per conv
 function turno () {
     let talpa_x = Math.floor(Math.random()*dim_x);
     let talpa_y = Math.floor(Math.random()*dim_y);
+    document.querySelector("table").dataset.x = talpa_x;
+    document.querySelector("table").dataset.y = talpa_y;
     let button = document.getElementById("puls/" + talpa_x + "/" + talpa_y);
     let img = document.createElement("img");
     img.src = "img/TalpaBella.gif";
     img.draggable = false;
-    img.style.height = "100%";
-    img.style.width = "100%";
+    resizeImage(img, button);
     button.appendChild(img);
     impostaTimerFunz(togliTalpa, 0, 1, talpa_x, talpa_y); //talpa_xy sono parametri che vengono passati
 }
 
 function togliTalpa (talpa_x, talpa_y) {
-    alert(talpa_x);
     let button = document.getElementById("puls/" + talpa_x + "/" + talpa_y);
     button.removeChild(button.childNodes[0]);
+    document.querySelector("table").dataset.x = -1;
+    document.querySelector("table").dataset.y = -1;
     impostaTimerFunz(turno, 0, 4);
+}
+
+function resizeImage(img, parent) {
+    let parentWidth = parent.offsetWidth;
+    let parentHeight = parent.offsetHeight;
+
+    let minSide = Math.min(parentWidth, parentHeight);
+
+    img.style.width = (minSide - 5) + "px";
+    img.style.height = (minSide - 5) + "px";
+}
+
+function applicaAnimazione () {
+    document.getElementById("punteggio").animate([
+        { color: 'black' },
+        { color: 'yellow' },
+        { color: 'red' },
+        { color: 'brown' },
+        { color: 'black' }
+    ], {
+        duration: 400,
+        iterations: 1
+    });
+}
+
+function applicaPunteggio () {
+    document.getElementById("punteggio").innerText = punteggio;
 }
