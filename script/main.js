@@ -1,5 +1,6 @@
 let dim_y = 15;
 let dim_x = 9;
+let difficolta = 0;
 let punteggio = 0;
 
 function genera () {
@@ -7,11 +8,9 @@ function genera () {
     document.getElementById("genera").style.display = "none";
     document.getElementById("difficolasceglibile").style.display = "none";
     document.getElementById("difficolasceglibilel").style.display = "none";
-    document.getElementById("difficolaingioco").style.display = "block";
-    document.getElementById("difficolaingiocol").style.display = "block";
     document.getElementById("dimens").style.display = "none";
 
-    difficoltà = parseInt(document.getElementById("difficolasceglibile").value);
+    difficolta = parseInt(document.getElementById("difficolasceglibile").value);
     dim_x = parseFloat(document.getElementById("dx").value);
     dim_y = parseFloat(document.getElementById("dy").value);
     if (Math.trunc(dim_x) == dim_x && Math.trunc(dim_y) == dim_y
@@ -49,6 +48,7 @@ function genera () {
                 ) {
                     punteggio++;
                     applicaAnimazione();
+                    togliTalpa(this.dataset.x, this.dataset.y);
                 } else if (punteggio > 0) {
                     punteggio--;
                 }
@@ -62,7 +62,7 @@ function genera () {
     }
     document.getElementById("gioco").appendChild(tabella);
 
-    impostaTimerFunz(turno, 0, 2);
+    impostaTimerFunz(turno, 1, 2.5);
 }
 
 function impostaTimerFunz (funz, minSec, maxSec, ...args) { //... serve per convertire un array in argomenti separati da virgola. In questo caso serve per passare un numero indefinito di argomenti alla funzione
@@ -80,7 +80,9 @@ function turno () {
     img.draggable = false;
     resizeImage(img, button);
     button.appendChild(img);
-    impostaTimerFunz(togliTalpa, 0, 1, talpa_x, talpa_y); //talpa_xy sono parametri che vengono passati
+    let tmin = difficolta*0.4+0.2; //imposta tempo in base alla difficolta e al progresso
+    let tmax = difficolta*1+1.5;
+    impostaTimerFunz(togliTalpa, tmin, tmax, talpa_x, talpa_y); //talpa_xy sono parametri che vengono passati
 }
 
 function togliTalpa (talpa_x, talpa_y) {
@@ -88,7 +90,7 @@ function togliTalpa (talpa_x, talpa_y) {
     button.removeChild(button.childNodes[0]);
     document.querySelector("table").dataset.x = -1;
     document.querySelector("table").dataset.y = -1;
-    impostaTimerFunz(turno, 0, 4);
+    impostaTimerFunz(turno, 1, 3);
 }
 
 function resizeImage(img, parent) {
