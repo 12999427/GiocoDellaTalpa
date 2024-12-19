@@ -16,7 +16,7 @@ function genera () {
     document.getElementById("tempolabel").style.display = "none";
     tempo = document.getElementById("tempo").value;
 
-    difficolta = parseInt(document.getElementById("difficolasceglibile").value);
+    difficolta = (1 - parseFloat(document.getElementById("difficolasceglibile").value))*3; //in realtà è inversa
     dim_x = parseFloat(document.getElementById("dx").value);
     dim_y = parseFloat(document.getElementById("dy").value);
     if (Math.trunc(dim_x) == dim_x && Math.trunc(dim_y) == dim_y
