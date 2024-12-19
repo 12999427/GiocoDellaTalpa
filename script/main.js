@@ -130,6 +130,6 @@ function applicaPunteggio () {
 
 function fine () { //scaduto
     clearTimeout(timerHandle);
-    document.getElementById("gioco").innerHTML = `Hai fatto ${punteggio} in ${tempo} secondi`;
+    document.getElementById("gioco").innerHTML = `Hai fatto ${punteggio} punti in ${tempo} secondi`;
 
 }
