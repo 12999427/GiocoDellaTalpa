@@ -2,6 +2,9 @@ let dim_y = 15;
 let dim_x = 9;
 let difficolta = 0;
 let punteggio = 0;
+let tempo;
+
+let timerHandle;
 
 function genera () {
     document.getElementById("punteggio").style.display = "block";
@@ -9,13 +12,17 @@ function genera () {
     document.getElementById("difficolasceglibile").style.display = "none";
     document.getElementById("difficolasceglibilel").style.display = "none";
     document.getElementById("dimens").style.display = "none";
+    document.getElementById("tempo").style.display = "none";
+    document.getElementById("tempolabel").style.display = "none";
+    tempo = document.getElementById("tempo").value;
 
     difficolta = parseInt(document.getElementById("difficolasceglibile").value);
     dim_x = parseFloat(document.getElementById("dx").value);
     dim_y = parseFloat(document.getElementById("dy").value);
     if (Math.trunc(dim_x) == dim_x && Math.trunc(dim_y) == dim_y
         && !isNaN(dim_x) && !isNaN(dim_y)
-        && dim_x>0 && dim_y>0) {
+        && dim_x>0 && dim_y>0
+        && !isNaN(parseInt(tempo))) {
         dim_x = Math.trunc(dim_x);
         dim_y = Math.trunc(dim_y);
     } else {
@@ -62,11 +69,12 @@ function genera () {
     }
     document.getElementById("gioco").appendChild(tabella);
 
-    impostaTimerFunz(turno, 1, 2.5);
+    let timerHandle = impostaTimerFunz(turno, 1, 2.5);
+    impostaTimerFunz(fine, tempo, tempo);
 }
 
 function impostaTimerFunz (funz, minSec, maxSec, ...args) { //... serve per convertire un array in argomenti separati da virgola. In questo caso serve per passare un numero indefinito di argomenti alla funzione
-    setTimeout(funz, 1000*minSec+Math.floor(Math.random()*(maxSec-minSec)*1000), ...args);
+    return setTimeout(funz, 1000*minSec+Math.floor(Math.random()*(maxSec-minSec)*1000), ...args);
 }
 
 function turno () {
@@ -90,7 +98,7 @@ function togliTalpa (talpa_x, talpa_y) {
     button.removeChild(button.childNodes[0]);
     document.querySelector("table").dataset.x = -1;
     document.querySelector("table").dataset.y = -1;
-    impostaTimerFunz(turno, 1, 3);
+    let timerHandle = impostaTimerFunz(turno, 1, 3);
 }
 
 function resizeImage(img, parent) {
@@ -118,4 +126,10 @@ function applicaAnimazione () {
 
 function applicaPunteggio () {
     document.getElementById("punteggio").innerText = punteggio;
+}
+
+function fine () { //scaduto
+    clearTimeout(timerHandle);
+    document.getElementById("gioco").innerHTML = `Hai fatto ${punteggio} in ${tempo} secondi`;
+
 }
