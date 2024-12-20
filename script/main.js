@@ -3,7 +3,7 @@ let dim_x = 9;
 let difficolta = 0;
 let punteggio = 0;
 let tempo;
-
+let punteggioMax = (new URLSearchParams(window.location.search)).get("maxScore");
 let timerHandle;
 
 function genera () {
@@ -130,6 +130,14 @@ function applicaPunteggio () {
 
 function fine () { //scaduto
     clearTimeout(timerHandle);
+    if (punteggio>punteggioMax){
+        punteggioMax = punteggio;
+    }
     document.getElementById("gioco").innerHTML = `Hai fatto ${punteggio} punti in ${tempo} secondi`;
+    let riprova = document.createElement("button");
+    riprova.onclick = () => {
+        window.location.href = window.location.href + "?maxScore=" + punteggioMax;
+    }
+    document.body.appendChild(riprova);
 
 }
