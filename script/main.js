@@ -6,6 +6,10 @@ let tempo;
 let punteggioMax = (new URLSearchParams(window.location.search)).get("maxScore");
 let timerHandle;
 
+window.onload = function () {
+    document.getElementById("maxscore").innerText = "Punteggio massimo: " + punteggioMax;
+}
+
 function genera () {
     document.getElementById("punteggio").style.display = "block";
     document.getElementById("genera").style.display = "none";
@@ -15,6 +19,7 @@ function genera () {
     document.getElementById("tempo").style.display = "none";
     document.getElementById("tempolabel").style.display = "none";
     tempo = document.getElementById("tempo").value;
+    document.getElementById("maxscore").style.display = "none";
 
     difficolta = (1 - parseFloat(document.getElementById("difficolasceglibile").value))*3; //in realtà è inversa
     dim_x = parseFloat(document.getElementById("dx").value);
@@ -135,8 +140,9 @@ function fine () { //scaduto
     }
     document.getElementById("gioco").innerHTML = `Hai fatto ${punteggio} punti in ${tempo} secondi`;
     let riprova = document.createElement("button");
+    riprova.innerText = "Riprova";
     riprova.onclick = () => {
-        window.location.href = window.location.href + "?maxScore=" + punteggioMax;
+        window.location.href = "index.html" + "?maxScore=" + punteggioMax;
     }
     document.body.appendChild(riprova);
 
